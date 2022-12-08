@@ -1,13 +1,10 @@
-#include "HX711.h"
-
-#define LOADCELL_DOUT_PIN  2
-#define LOADCELL_SCK_PIN  4
-
+#include "HX711.h" // define the library of the module
+#define LOADCELL_DOUT_PIN  2 // define the ESP pins
+#define LOADCELL_SCK_PIN  4 // define the ESP pins
 HX711 scale;
-
-float calibration_factor = -208560.00;
-// 229000 for kg  zero_factor 276088 
-// 226 for gram
+float calibration_factor = -208560.00; // define the calibration factor
+// -208560.00 for kilogram
+// -226 for gram
 
 void setup() {
   Serial.begin(9600);
@@ -17,7 +14,7 @@ void setup() {
   Serial.println("Press + or a to increase calibration factor");
   Serial.println("Press - or z to decrease calibration factor");
 
-  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN); // reading of the load cell
   scale.set_scale();
   scale.tare();	//Reset the scale to 0
 
@@ -32,12 +29,12 @@ void loop() {
 
   Serial.print("Reading: ");
   Serial.print(scale.get_units()*-1, 1);
-  Serial.print(" Kg"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
+  Serial.print(" Kg"); //Change this to g and re-adjust the calibration factor
   Serial.print(" calibration_factor: ");
   Serial.print(calibration_factor);
   Serial.println();
 
-  if(Serial.available())
+  if(Serial.available())  // for editing the calibration factor
   {
     char temp = Serial.read();
     if(temp == '+' || temp == 'a')
